@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { celebrateDone } from './celebrate';
 import { collectAncestors, collectDescendants, findNodeAtLine, parseDocument } from './parser';
 import { formatTimestamp } from './timestamp';
 
@@ -62,5 +63,13 @@ export async function toggleCommand(editor: vscode.TextEditor): Promise<void> {
     edit.replace(editor.document.uri, range, newLine);
   }
 
-  await vscode.workspace.applyEdit(edit);
+  const applied = await vscode.workspace.applyEdit(edit);
+  if (!applied || !newChecked) {
+    return;
+  }
+
+  const checkedLines = [...affected.entries()]
+    .filter(([, checked]) => checked)
+    .map(([lineIndex]) => lineIndex);
+  await celebrateDone(editor, checkedLines);
 }

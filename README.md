@@ -38,6 +38,14 @@ things:
    done — even if some of their children are finished — are left exactly
    where they are.
 
+Checking an item plays a short check-pop in the editor. Archiving shows a
+toast that names the items that moved.
+
+If [Todo+](https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-todo-plus)
+is also installed, it binds the same ⌥D / ⌥S keys on todo files. Use the
+**Zen TODO:** commands from the Command Palette if those keys do not run
+this extension.
+
 Nesting is arbitrary-depth and purely indentation-based; no fixed section
 name is assumed. Plain (non-checkbox) lines, such as notes or bullet points
 under an item, travel with that item when it's toggled/cascaded or archived.
@@ -68,19 +76,15 @@ or `*.todo` file.
 
 ## Install locally (without the Marketplace)
 
-Package and install a `.vsix`:
+Compile, package, and force-install into VS Code:
 
 ```sh
-npx @vscode/vsce package
-code --install-extension zen-todo-0.0.1.vsix
+npm install
+npm run reinstall
 ```
 
-Or symlink this folder into your extensions directory (run `npm run compile`
-first, and re-run it after any change):
-
-```sh
-ln -s /path/to/zen-todo ~/.vscode/extensions/zen-todo
-```
+Then **Developer: Reload Window**. That script is the only local install path;
+it always writes `zen-todo.vsix` and runs `code --install-extension --force`.
 
 ## Deliberately out of scope
 
@@ -92,16 +96,15 @@ No settings or automated test suite — kept intentionally minimal.
 
 ```sh
 npm install
-npm run compile
-npx @vscode/vsce package
+npm run package
 ```
 
-Attach the generated `zen-todo-<version>.vsix` to a
+Attach the generated `zen-todo.vsix` to a
 [GitHub Release](https://github.com/josh08h/zen-todo/releases).
 Others install it with:
 
 ```sh
-code --install-extension zen-todo-<version>.vsix
+code --install-extension zen-todo.vsix
 ```
 
 ### 2. Publish to the official VS Code Marketplace

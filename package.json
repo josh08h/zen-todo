@@ -1,8 +1,9 @@
 {
   "name": "zen-todo",
-  "displayName": "zen-todo",
+  "displayName": "Zen TODO",
   "description": "Minimal personal TODO list extension: checkbox toggling with cascade/rollup, start/done timestamps, colour coding, and archiving of completed items.",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "icon": "images/icon.png",
   "license": "MIT",
   "publisher": "josh08h",
   "author": {
@@ -82,11 +83,14 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p .",
-    "watch": "tsc -w -p ."
+    "watch": "tsc -w -p .",
+    "package": "vsce package --out zen-todo.vsix --no-dependencies --no-yarn --no-rewrite-relative-links --allow-missing-repository",
+    "reinstall": "bash scripts/reinstall.sh"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "4.0.0",
     "typescript": "^5.4.0"
   }
 }

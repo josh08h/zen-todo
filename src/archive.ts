@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { isSubtreeChecked, parseDocument } from './parser';
+import { isSubtreeChecked, parseDocument, TodoNode } from './parser';
 
 /**
  * Moves every top-level item (and its whole subtree) that is fully checked
@@ -15,7 +15,7 @@ export async function archiveCompletedCommand(editor: vscode.TextEditor): Promis
   const toArchive = roots.filter(isSubtreeChecked).sort((a, b) => a.lineIndex - b.lineIndex);
 
   if (toArchive.length === 0) {
-    vscode.window.showInformationMessage('TODO: no fully completed top-level items to archive.');
+    vscode.window.showInformationMessage('No fully completed items to archive.');
     return;
   }
 
@@ -51,7 +51,29 @@ export async function archiveCompletedCommand(editor: vscode.TextEditor): Promis
   const fullRange = new vscode.Range(document.positionAt(0), document.positionAt(document.getText().length));
   const edit = new vscode.WorkspaceEdit();
   edit.replace(document.uri, fullRange, finalLines.join(eol));
-  await vscode.workspace.applyEdit(edit);
+  const applied = await vscode.workspace.applyEdit(edit);
+  if (!applied) {
+    return;
+  }
 
-  vscode.window.showInformationMessage(`TODO: archived ${toArchive.length} completed item(s).`);
+  vscode.window.showInformationMessage(archiveToast(lines, toArchive));
+}
+
+function itemTitle(line: string): string {
+  const title = line
+    .replace(/^\s*\[[xX ]\]\s*/, '')
+    .replace(/\s*@[A-Za-z][A-Za-z0-9_]*(?:\([^)]*\))?/g, '')
+    .trim();
+  return title.length > 40 ? `${title.slice(0, 37)}…` : title;
+}
+
+function archiveToast(lines: string[], nodes: TodoNode[]): string {
+  const titles = nodes.map((node) => itemTitle(lines[node.lineIndex])).filter(Boolean);
+  if (titles.length === 1) {
+    return `✓ Archived “${titles[0]}”`;
+  }
+  if (titles.length === 2) {
+    return `✓ Archived “${titles[0]}” and “${titles[1]}”`;
+  }
+  return `✓ Archived ${titles.length} completed items`;
 }
