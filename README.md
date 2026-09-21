@@ -12,10 +12,12 @@ a few things:
    - `@tag(...)` annotations (e.g. `@started(...)`, `@done(...)`) get a
      distinct colour.
    - Plain note/bullet lines (`  - some detail`) are rendered like comments.
+   - An open item tagged `@started(...)` is rendered in orange (the
+     "string" colour) to flag it as in progress.
    - Exact colours depend on your current colour theme, since the grammar
      just maps onto standard TextMate scopes (`markup.heading`,
      `keyword.control`, `markup.strikethrough`, `constant.other.tag`,
-     `comment.line`).
+     `comment.line`, `string.unquoted`).
 2. **Option+D** (`alt+d`) toggles the `[ ]`/`[x]` checkbox on the current
    line:
    - Cascades the new state to every nested sub-item under it.
@@ -24,7 +26,10 @@ a few things:
      soon as any child is unchecked.
    - Checking an item stamps it with `@done(YY-MM-DD HH:mm)` (matching the
      existing `@started(...)` convention); unchecking removes that stamp.
-3. **Command Palette → "TODO: Archive Completed"** moves every top-level
+3. **Option+S** (`alt+s`) toggles an `@started(YY-MM-DD HH:mm)` tag on the
+   cursor's item, to mark it as in progress (turns it orange — see above).
+   Pressing it again on an already-started item removes the tag.
+4. **Command Palette → "TODO: Archive Completed"** moves every top-level
    item that is fully checked (itself and all descendants) into an
    `Archive:` section at the end of the file. Items that are only partially
    done — even if some of their children are finished — are left exactly
@@ -71,5 +76,53 @@ Either:
 
 ## Deliberately out of scope
 
-No settings, automated test suite, or Marketplace publishing — kept
-intentionally minimal.
+No settings or automated test suite — kept intentionally minimal.
+
+## Publishing / sharing with others
+
+Two options, from simplest to most "official":
+
+### 1. Share a `.vsix` via GitHub (no publisher account needed)
+
+```sh
+npm install
+npm run compile
+npx @vscode/vsce package
+```
+
+Push this repo to GitHub, then attach the generated `vscode-todo-<version>.vsix`
+to a [GitHub Release](https://docs.github.com/en/repositories/releasing-projects-on-github).
+Others install it with:
+
+```sh
+code --install-extension vscode-todo-<version>.vsix
+```
+
+Before doing this:
+- Add a real `"repository"` field to `package.json` once the GitHub URL
+  exists (`{"type": "git", "url": "https://github.com/<you>/vscode-todo.git"}`)
+  — `vsce package` currently only warns about its absence, it isn't fatal.
+- `LICENSE` (MIT) is already included.
+
+### 2. Publish to the official VS Code Marketplace
+
+Extra steps beyond option 1:
+
+1. Create an Azure DevOps organisation and a
+   [Personal Access Token](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#get-a-personal-access-token)
+   with **Marketplace (Manage)** scope.
+2. Register a publisher: `npx @vscode/vsce create-publisher <publisher-id>`
+   (or via https://marketplace.visualstudio.com/manage), then set that id as
+   `"publisher"` in `package.json` (currently the placeholder `"local"`).
+3. Add an `"icon"` field pointing at a 128×128 PNG for the Marketplace
+   listing (optional but recommended).
+4. Log in and publish:
+   ```sh
+   npx @vscode/vsce login <publisher-id>
+   npx @vscode/vsce publish
+   ```
+5. From then on, bump versions with `vsce publish patch|minor|major`.
+
+Both routes work from the same `package.json`/build — option 2 just adds
+publisher registration and a couple of metadata fields on top of option 1.
+
