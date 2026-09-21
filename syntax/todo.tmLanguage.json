@@ -1,0 +1,59 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "TODO",
+  "scopeName": "source.todo",
+  "patterns": [
+    { "include": "#header" },
+    { "include": "#doneItem" },
+    { "include": "#startedItem" },
+    { "include": "#openItem" },
+    { "include": "#note" }
+  ],
+  "repository": {
+    "header": {
+      "comment": "A section header: a line ending in ':' that isn't a checkbox or a note bullet, e.g. 'TODO:', 'Archive:'.",
+      "match": "^(?!\\s*[-\\[]).+:\\s*$",
+      "name": "markup.heading.todo"
+    },
+    "doneItem": {
+      "comment": "A completed '[x] ...' line: the box and the rest of the line (including any @done tag) are struck through.",
+      "match": "^(\\s*)(\\[[xX]\\])(.*)$",
+      "captures": {
+        "2": { "name": "keyword.control.checkbox.done.todo" },
+        "3": {
+          "name": "markup.strikethrough.todo",
+          "patterns": [{ "include": "#tags" }]
+        }
+      }
+    },
+    "startedItem": {
+      "comment": "An open '[ ] ...' line tagged @started(...): rendered in orange (the 'string' scope) to flag it as in progress.",
+      "match": "^(\\s*)(\\[ \\])(.*@started\\([^)]*\\).*)$",
+      "captures": {
+        "2": { "name": "string.unquoted.started.todo" },
+        "3": { "name": "string.unquoted.started.todo" }
+      }
+    },
+    "openItem": {
+      "comment": "An open '[ ] ...' line.",
+      "match": "^(\\s*)(\\[ \\])(.*)$",
+      "captures": {
+        "2": { "name": "keyword.control.checkbox.open.todo" },
+        "3": {
+          "name": "text.todo",
+          "patterns": [{ "include": "#tags" }]
+        }
+      }
+    },
+    "note": {
+      "comment": "A plain note/bullet line attached to the preceding item, e.g. '  - some detail'.",
+      "match": "^\\s*-\\s+.*$",
+      "name": "comment.line.todo"
+    },
+    "tags": {
+      "comment": "Inline annotations such as @started(...) or @done(...).",
+      "match": "@[A-Za-z][A-Za-z0-9_]*(\\([^)]*\\))?",
+      "name": "constant.other.tag.todo"
+    }
+  }
+}

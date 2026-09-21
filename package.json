@@ -1,0 +1,66 @@
+{
+  "name": "vscode-todo",
+  "displayName": "vscode-todo",
+  "description": "Minimal personal TODO list extension: checkbox toggling with cascade/rollup and archiving of completed items.",
+  "version": "0.0.1",
+  "private": true,
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "todo",
+        "filenamePatterns": ["TODO"]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "todo",
+        "scopeName": "source.todo",
+        "path": "./syntax/todo.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "todo.toggle",
+        "title": "TODO: Toggle Checkbox"
+      },
+      {
+        "command": "todo.markStarted",
+        "title": "TODO: Mark Started"
+      },
+      {
+        "command": "todo.archiveCompleted",
+        "title": "TODO: Archive Completed"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "todo.toggle",
+        "key": "alt+d",
+        "mac": "alt+d",
+        "when": "editorTextFocus && editorLangId == todo"
+      },
+      {
+        "command": "todo.markStarted",
+        "key": "alt+s",
+        "mac": "alt+s",
+        "when": "editorTextFocus && editorLangId == todo"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "watch": "tsc -w -p ."
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.4.0"
+  }
+}
