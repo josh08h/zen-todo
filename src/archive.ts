@@ -46,10 +46,11 @@ export async function archiveCompletedCommand(editor: vscode.TextEditor): Promis
   }
 
   const finalLines = [...head, '', 'Archive:', ...newArchiveBody];
+  const eol = document.eol === vscode.EndOfLine.CRLF ? '\r\n' : '\n';
 
   const fullRange = new vscode.Range(document.positionAt(0), document.positionAt(document.getText().length));
   const edit = new vscode.WorkspaceEdit();
-  edit.replace(document.uri, fullRange, finalLines.join('\n'));
+  edit.replace(document.uri, fullRange, finalLines.join(eol));
   await vscode.workspace.applyEdit(edit);
 
   vscode.window.showInformationMessage(`TODO: archived ${toArchive.length} completed item(s).`);

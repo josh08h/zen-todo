@@ -29,9 +29,20 @@
       {
         "id": "todo",
         "aliases": ["TODO", "zen-todo"],
-        "filenamePatterns": ["TODO"]
+        "extensions": [".todo"],
+        "filenames": ["TODO", "todo", "TODO.md", "todo.md"],
+        "filenamePatterns": ["TODO", "todo"]
       }
     ],
+    "configurationDefaults": {
+      "files.associations": {
+        "TODO": "todo",
+        "todo": "todo",
+        "TODO.md": "todo",
+        "todo.md": "todo",
+        "*.todo": "todo"
+      }
+    },
     "grammars": [
       {
         "language": "todo",

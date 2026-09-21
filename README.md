@@ -3,8 +3,11 @@
 A small, local-only replacement for the TODO+ extension. It only does a few
 things:
 
-1. Recognises any file literally named `TODO` (no extension) as a `todo`
-   language, with basic colour coding:
+![zen-todo demo: start a task, toggle nested checkboxes, archive completed items](images/demo.gif)
+
+
+1. Recognises `TODO` / `todo` files, `TODO.md` / `todo.md`, and `*.todo`
+   as a `todo` language, with basic colour coding:
    - Section headers (e.g. `TODO:`, `Archive:`) are highlighted as headings.
    - `[ ]` open checkboxes get a distinct "keyword" colour.
    - `[x]` completed items (box, text, and any `@done(...)` tag) are
@@ -60,7 +63,8 @@ npm run compile   # or: npm run watch
 ```
 
 Press **F5** in VS Code (with this folder open) to launch an Extension
-Development Host with the extension loaded, then open a file named `TODO`.
+Development Host with the extension loaded, then open a `TODO`, `TODO.md`,
+or `*.todo` file.
 
 ## Install locally (without the Marketplace)
 
