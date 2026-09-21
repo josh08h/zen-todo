@@ -1,10 +1,22 @@
 {
-  "name": "vscode-todo",
-  "displayName": "vscode-todo",
+  "name": "zen-todo",
+  "displayName": "zen-todo",
   "description": "Minimal personal TODO list extension: checkbox toggling with cascade/rollup, start/done timestamps, colour coding, and archiving of completed items.",
   "version": "0.0.1",
   "license": "MIT",
-  "publisher": "local",
+  "publisher": "josh08h",
+  "author": {
+    "name": "Josh Hale",
+    "email": "hale.j.0810@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/josh08h/zen-todo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/josh08h/zen-todo/issues"
+  },
+  "homepage": "https://github.com/josh08h/zen-todo#readme",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -16,6 +28,7 @@
     "languages": [
       {
         "id": "todo",
+        "aliases": ["TODO", "zen-todo"],
         "filenamePatterns": ["TODO"]
       }
     ],
@@ -29,15 +42,15 @@
     "commands": [
       {
         "command": "todo.toggle",
-        "title": "TODO: Toggle Checkbox"
+        "title": "Zen TODO: Toggle Checkbox"
       },
       {
         "command": "todo.markStarted",
-        "title": "TODO: Mark Started"
+        "title": "Zen TODO: Mark Started"
       },
       {
         "command": "todo.archiveCompleted",
-        "title": "TODO: Archive Completed"
+        "title": "Zen TODO: Archive Completed"
       }
     ],
     "keybindings": [
@@ -56,6 +69,7 @@
     ]
   },
   "scripts": {
+    "vscode:prepublish": "npm run compile",
     "compile": "tsc -p .",
     "watch": "tsc -w -p ."
   },

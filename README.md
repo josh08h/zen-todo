@@ -1,7 +1,7 @@
-# vscode-todo
+# zen-todo
 
-A very small, personal replacement for the TODO+ extension. It only does
-a few things:
+A small, local-only replacement for the TODO+ extension. It only does a few
+things:
 
 1. Recognises any file literally named `TODO` (no extension) as a `todo`
    language, with basic colour coding:
@@ -29,7 +29,7 @@ a few things:
 3. **Option+S** (`alt+s`) toggles an `@started(YY-MM-DD HH:mm)` tag on the
    cursor's item, to mark it as in progress (turns it orange — see above).
    Pressing it again on an already-started item removes the tag.
-4. **Command Palette → "TODO: Archive Completed"** moves every top-level
+4. **Command Palette → "Zen TODO: Archive Completed"** moves every top-level
    item that is fully checked (itself and all descendants) into an
    `Archive:` section at the end of the file. Items that are only partially
    done — even if some of their children are finished — are left exactly
@@ -38,6 +38,9 @@ a few things:
 Nesting is arbitrary-depth and purely indentation-based; no fixed section
 name is assumed. Plain (non-checkbox) lines, such as notes or bullet points
 under an item, travel with that item when it's toggled/cascaded or archived.
+
+The extension never leaves your machine: no telemetry, no network, no
+cloud sync. Your list is the file in front of you.
 
 ## Format
 
@@ -61,18 +64,19 @@ Development Host with the extension loaded, then open a file named `TODO`.
 
 ## Install locally (without the Marketplace)
 
-Either:
+Package and install a `.vsix`:
 
-- Symlink this folder into your extensions directory:
-  ```sh
-  ln -s ~/ai/vscode-todo ~/.vscode/extensions/vscode-todo
-  ```
-  (run `npm run compile` first, and re-run it after any change), or
-- Package and install a `.vsix`:
-  ```sh
-  npx @vscode/vsce package
-  code --install-extension vscode-todo-0.0.1.vsix
-  ```
+```sh
+npx @vscode/vsce package
+code --install-extension zen-todo-0.0.1.vsix
+```
+
+Or symlink this folder into your extensions directory (run `npm run compile`
+first, and re-run it after any change):
+
+```sh
+ln -s /path/to/zen-todo ~/.vscode/extensions/zen-todo
+```
 
 ## Deliberately out of scope
 
@@ -80,9 +84,7 @@ No settings or automated test suite — kept intentionally minimal.
 
 ## Publishing / sharing with others
 
-Two options, from simplest to most "official":
-
-### 1. Share a `.vsix` via GitHub (no publisher account needed)
+### 1. Share a `.vsix` via GitHub
 
 ```sh
 npm install
@@ -90,39 +92,31 @@ npm run compile
 npx @vscode/vsce package
 ```
 
-Push this repo to GitHub, then attach the generated `vscode-todo-<version>.vsix`
-to a [GitHub Release](https://docs.github.com/en/repositories/releasing-projects-on-github).
+Attach the generated `zen-todo-<version>.vsix` to a
+[GitHub Release](https://github.com/josh08h/zen-todo/releases).
 Others install it with:
 
 ```sh
-code --install-extension vscode-todo-<version>.vsix
+code --install-extension zen-todo-<version>.vsix
 ```
 
-Before doing this:
-- Add a real `"repository"` field to `package.json` once the GitHub URL
-  exists (`{"type": "git", "url": "https://github.com/<you>/vscode-todo.git"}`)
-  — `vsce package` currently only warns about its absence, it isn't fatal.
-- `LICENSE` (MIT) is already included.
-
 ### 2. Publish to the official VS Code Marketplace
-
-Extra steps beyond option 1:
 
 1. Create an Azure DevOps organisation and a
    [Personal Access Token](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#get-a-personal-access-token)
    with **Marketplace (Manage)** scope.
-2. Register a publisher: `npx @vscode/vsce create-publisher <publisher-id>`
-   (or via https://marketplace.visualstudio.com/manage), then set that id as
-   `"publisher"` in `package.json` (currently the placeholder `"local"`).
+2. Register a publisher: `npx @vscode/vsce create-publisher josh08h`
+   (or via https://marketplace.visualstudio.com/manage). The `"publisher"`
+   field in `package.json` is already set to `josh08h`.
 3. Add an `"icon"` field pointing at a 128×128 PNG for the Marketplace
    listing (optional but recommended).
 4. Log in and publish:
    ```sh
-   npx @vscode/vsce login <publisher-id>
+   npx @vscode/vsce login josh08h
    npx @vscode/vsce publish
    ```
 5. From then on, bump versions with `vsce publish patch|minor|major`.
 
-Both routes work from the same `package.json`/build — option 2 just adds
-publisher registration and a couple of metadata fields on top of option 1.
+## License
 
+MIT. See [LICENSE](LICENSE).
